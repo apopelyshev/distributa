@@ -29,7 +29,7 @@ public class Util {
     for (Person smb : searchArr) {
       String temp = smb.getName().toUpperCase()+"_TRACK";
       if (System.getenv(temp).equals(arg)) {
-        System.setProperty(temp, getMAC(getIP(req)));
+        System.setProperty(temp, getIP(req));
         break;
       }
     }
