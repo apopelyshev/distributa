@@ -1,6 +1,8 @@
 package pl.edu.pwr.w8.distributor;
 
 import java.util.Optional;
+
+import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 
@@ -20,7 +22,8 @@ public class Main {
     tomcat.setConnector(nioConnector);
     tomcat.getHost().setAppBase(appBase);
     tomcat.getService().addConnector(tomcat.getConnector());
-    tomcat.addWebapp(contextPath, appBase);
+    Context webContext = tomcat.addWebapp(contextPath, appBase);
+    webContext.setAltDDName(Util.getProps().getProperty("pathTo.xml"));
     tomcat.start();
     tomcat.getServer().await();
   }
