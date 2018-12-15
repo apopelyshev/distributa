@@ -10,7 +10,6 @@ public class Main {
   public static final Optional<String> PORT = Optional.ofNullable(System.getenv("PORT"));
 
   public static void main(String[] args) throws Exception {
-    String appBase = Util.getProps().getProperty("pathTo.app");
     int port = Integer.valueOf(PORT.orElse("8080"));
     Tomcat tomcat = new Tomcat();
     
@@ -19,9 +18,9 @@ public class Main {
     
     tomcat.setPort(port);
     tomcat.setConnector(nioConnector);
-    tomcat.getHost().setAppBase(appBase);
+    tomcat.getHost().setAppBase(".");
     tomcat.getService().addConnector(tomcat.getConnector());
-    StandardContext ctx = (StandardContext) tomcat.addWebapp("", appBase);
+    StandardContext ctx = (StandardContext) tomcat.addWebapp("", ".");
     ctx.setDefaultWebXml(Util.getProps().getProperty("pathTo.xml"));
     tomcat.start();
     tomcat.getServer().await();
