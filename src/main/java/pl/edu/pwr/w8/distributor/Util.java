@@ -3,11 +3,24 @@ package pl.edu.pwr.w8.distributor;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.io.UnsupportedEncodingException;
-import java.util.Properties;
-
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.TimeoutException;
+
+import net.rubyeye.xmemcached.auth.AuthInfo;
+import net.rubyeye.xmemcached.command.BinaryCommandFactory;
+import net.rubyeye.xmemcached.exception.MemcachedException;
+import net.rubyeye.xmemcached.MemcachedClient;
+import net.rubyeye.xmemcached.MemcachedClientBuilder;
+import net.rubyeye.xmemcached.utils.AddrUtil;
+import net.rubyeye.xmemcached.XMemcachedClientBuilder;
 
 public class Util {
   public static Properties getProps() {
@@ -19,45 +32,71 @@ public class Util {
     }
     return res;
   }
-  
+
   public static InputStreamReader path2Stream(String arg) throws UnsupportedEncodingException {
     InputStream temp = new Util().getClass().getResourceAsStream(arg);
     return new InputStreamReader(temp, "UTF-8");
   }
-  
-  public static void handleTrackCode(HttpServletRequest req, String arg, Person[] searchArr) {
-    for (Person smb : searchArr) {
-      String temp = smb.getName().toUpperCase()+"_TRACK";
-      if (System.getenv(temp).equals(arg)) {
-        System.setProperty(temp, getIP(req));
-        break;
-      }
+
+  public static MemcachedClient buildCacheClient() throws IOException {
+    List<InetSocketAddress> servers = AddrUtil.getAddresses(System.getenv("MEMCACHIER_SERVERS").replace(",", " "));
+    AuthInfo authInfo = AuthInfo.plain(
+        System.getenv("MEMCACHIER_USERNAME"),
+        System.getenv("MEMCACHIER_PASSWORD")
+    );
+    
+    MemcachedClientBuilder builder = new XMemcachedClientBuilder(servers);
+    for(InetSocketAddress server : servers) {
+      builder.addAuthInfo(server, authInfo);
     }
+    builder.setCommandFactory(new BinaryCommandFactory());
+    builder.setConnectTimeout(1000);
+    builder.setEnableHealSession(true);
+    builder.setHealSessionInterval(2000);
+    return builder.build();
+  }
+  
+  public static boolean setCached(String key, String value, MemcachedClient mc) {
+    try {
+      mc.set(key, 0, value);
+      return true;
+    } catch (TimeoutException | InterruptedException | MemcachedException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
+  
+  public static String getCached(String key, MemcachedClient mc) {
+    String value = "";
+    try {
+      value = mc.get(key);
+    } catch (TimeoutException | InterruptedException | MemcachedException e) {
+      e.printStackTrace();
+    }
+    return value;
   }
 
   public static String getIP(HttpServletRequest req) {
-    return (req.getHeader("x-forwarded-for") == null) ? req.getRemoteAddr()+" (NOT REAL)" : req.getHeader("x-forwarded-for");
+    return (req.getHeader("x-forwarded-for") == null)
+        ? req.getRemoteAddr() + " (NOT REAL)"
+        : req.getHeader("x-forwarded-for");
   }
 
   public static String getMAC(String ip) {
-    String str = "";
-    String macAddress = "";
+    StringBuilder sb = new StringBuilder();
     try {
-      Process p = Runtime.getRuntime().exec("nmblookup -A " + ip);
-      InputStreamReader ir = new InputStreamReader(p.getInputStream());
-      LineNumberReader input = new LineNumberReader(ir);
-      for (int i = 1; i < 100; i++) {
-        str = input.readLine();
-        if (str!=null) {
-          if (str.indexOf("MAC Address") > 1) {
-            macAddress = str.substring(str.indexOf("MAC Address") + 14, str.length());
-            break;
-          }
+      InetAddress address = InetAddress.getByName(ip);
+      NetworkInterface ni = NetworkInterface.getByInetAddress(address);
+      if (ni != null) {
+        byte[] mac = ni.getHardwareAddress();
+        if (mac != null) {
+          for (int i = 0; i < mac.length; i++)
+            sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
         }
       }
-    } catch (IOException e) {
+    } catch (UnknownHostException | SocketException e) {
       e.printStackTrace();
     }
-    return macAddress;
+    return sb.toString();
   }
 }
