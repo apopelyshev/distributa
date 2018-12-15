@@ -34,7 +34,7 @@ public class Person {
   public List<Integer> getOwnTopics() { return hasTopics; }
   public String getName() { return name; }
   public String getGender() { return gender; }
-  public String getImagePath() { return Util.getProps().getProperty("pathTo.images")+"/"+name+".png"; }
+  public String getImagePath() { return Util.getProps().getProperty("pathTo.images")+name+".png"; }
   public String toString() {
     return "Person{"+"name="+name+", gender="+gender+", topics="+hasTopics.toString()+"}";
   }

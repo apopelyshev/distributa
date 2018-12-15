@@ -26,7 +26,6 @@ public class MainServlet extends HttpServlet {
         try { cacheInstance = Util.buildCacheClient(); }
         catch (IOException ioe) { ioe.printStackTrace(); }
       }
-      if (cacheInstance==null) System.out.println("CACHE IS STILL NULL ALARM!!!!111");
       for (Person smb : result) {
         String temp = smb.getName().toUpperCase() + "_TRACK";
         boolean check = !Util.getCached(temp, cacheInstance).isEmpty();
@@ -41,7 +40,7 @@ public class MainServlet extends HttpServlet {
 
   private void forwardContent(HttpServletRequest req, HttpServletResponse resp, Person[] peopleArr)
       throws ServletException, IOException {
-    String nextJSP = Util.getProps().getProperty("pathTo.pages") + "/main.jsp";
+    String nextJSP = Util.getProps().getProperty("pathTo.pages") + "main.jsp";
     RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
     req.setAttribute("peopleArr", peopleArr);
     dispatcher.forward(req, resp);

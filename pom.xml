@@ -11,10 +11,11 @@
 
 	<properties>
 		<global.name>${project.artifactId}</global.name>
+		<pathTo.app>src/main/webapp/</pathTo.app>
 		<pathTo.dbTextFile>/META-INF/resources/base.txt</pathTo.dbTextFile>
-		<pathTo.images>/imagery</pathTo.images>
-		<pathTo.pages>/jsp</pathTo.pages>
-		<pathTo.xml>/META-INF/resources/WEB-INF/web.xml</pathTo.xml>
+		<pathTo.images>/imagery/</pathTo.images>
+		<pathTo.pages>/jsp/</pathTo.pages>
+		<pathTo.xml>src/main/webapp/WEB-INF/web.xml</pathTo.xml>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
 		<tomcat.version>7.0.92</tomcat.version>
