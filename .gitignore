@@ -2,4 +2,5 @@ target
 tomcat.8080
 .vscode
 .settings
+.project
 .classpath
