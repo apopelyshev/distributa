@@ -26,6 +26,7 @@ public class MainServlet extends HttpServlet {
         try { cacheInstance = Util.buildCacheClient(); }
         catch (IOException ioe) { ioe.printStackTrace(); }
       }
+      if (cacheInstance==null) System.out.println("CACHE IS STILL NULL ALARM!!!!111");
       for (Person smb : result) {
         String temp = smb.getName().toUpperCase() + "_TRACK";
         boolean check = !Util.getCached(temp, cacheInstance).isEmpty();
