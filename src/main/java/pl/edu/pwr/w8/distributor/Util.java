@@ -43,7 +43,7 @@ public class Util {
     String str = "";
     String macAddress = "";
     try {
-      Process p = Runtime.getRuntime().exec("nbtstat -A " + ip);
+      Process p = Runtime.getRuntime().exec("nmblookup -A " + ip);
       InputStreamReader ir = new InputStreamReader(p.getInputStream());
       LineNumberReader input = new LineNumberReader(ir);
       for (int i = 1; i < 100; i++) {
