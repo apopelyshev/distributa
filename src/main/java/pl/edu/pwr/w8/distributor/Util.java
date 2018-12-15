@@ -75,6 +75,7 @@ public class Util {
     } catch (TimeoutException | InterruptedException | MemcachedException e) {
       e.printStackTrace();
     }
+    System.out.println("AND HERE THE TROUBLES BEGIN...VALUE? - "+value);
     return value;
   }
 
