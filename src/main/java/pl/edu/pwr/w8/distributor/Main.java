@@ -3,7 +3,6 @@ package pl.edu.pwr.w8.distributor;
 import java.util.Optional;
 
 import org.apache.catalina.connector.Connector;
-import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
 
 public class Main {
@@ -20,8 +19,7 @@ public class Main {
     tomcat.setConnector(nioConnector);
     tomcat.getHost().setAppBase(".");
     tomcat.getService().addConnector(tomcat.getConnector());
-    StandardContext ctx = (StandardContext) tomcat.addWebapp("", ".");
-    ctx.setDefaultWebXml(Util.getProps().getProperty("pathTo.xml"));
+    tomcat.addWebapp("", ".");
     tomcat.start();
     tomcat.getServer().await();
   }
