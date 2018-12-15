@@ -13,7 +13,7 @@ public class Util {
   public static Properties getProps() {
     Properties res = new Properties();
     try {
-      res.load(path2Stream("my.properties"));
+      res.load(path2Stream("/my.properties"));
     } catch (IOException e) {
       e.printStackTrace();
     }
