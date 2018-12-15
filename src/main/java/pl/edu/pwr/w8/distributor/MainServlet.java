@@ -19,8 +19,10 @@ public class MainServlet extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     String code = req.getParameter("c");
     Person[] result = appService.getPeople();
-    if (code != null)
+    if (code != null) {
+      System.out.println("GOT A PARAMETER! LET'S SEE...");
       Util.handleTrackCode(req, code, result);
+    }
     forwardContent(req, resp, result);
   }
 
