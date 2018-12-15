@@ -69,13 +69,12 @@ public class Util {
   
   public static String getCached(String key, MemcachedClient mc) {
     String value = "";
-    System.out.println("WELL AT LEAST I GET HERE");
     try {
       value = mc.get(key);
     } catch (TimeoutException | InterruptedException | MemcachedException e) {
       e.printStackTrace();
     }
-    System.out.println("AND HERE THE TROUBLES BEGIN...VALUE? - "+value);
+    System.out.println("VALUE? - "+value);
     return value;
   }
 
