@@ -28,7 +28,8 @@ public class MainServlet extends HttpServlet {
       }
       for (Person smb : result) {
         String temp = smb.getName().toUpperCase() + "_TRACK";
-        boolean check = !Util.getCached(temp, cacheInstance).isEmpty();
+        boolean check = Util.getCached(temp, cacheInstance)!=null
+                     && !Util.getCached(temp, cacheInstance).isEmpty();
         if (System.getenv(temp).equals(code) && check) {
           Util.setCached(temp, Util.getIP(req), cacheInstance);
           break;
