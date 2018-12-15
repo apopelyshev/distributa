@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -jar target/w8-physics-distributor-jar-with-dependencies.jar
