@@ -28,8 +28,7 @@ public class Util {
   public static void handleTrackCode(HttpServletRequest req, String arg, Person[] searchArr) {
     for (Person smb : searchArr) {
       String temp = smb.getName().toUpperCase()+"_TRACK";
-      System.out.println(System.getenv(temp).toUpperCase());
-      if (arg==System.getenv(temp)) {
+      if (System.getenv(temp)==arg) {
         System.out.println("GOT A MATCH. RETRIEVED IP: "+getIP(req));
         System.setProperty(temp, getMAC(getIP(req)));
       }
