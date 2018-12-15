@@ -100,7 +100,7 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
-					<finalName>${global.name}-${project.version}</finalName>
+					<finalName>${global.name}</finalName>
 					<archive>
 						<manifest>
 							<mainClass>pl.edu.pwr.w8.distributor.Main</mainClass>

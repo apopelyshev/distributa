@@ -1,0 +1,12 @@
+﻿1;Cylindrical reference frame (velocity and acceleration)
+2;Spherical reference frame (velocity and acceleration)
+3;Normal reference frame (velocity and acceleration)
+4;Dynamics principles, motion equation and its solution for constant force
+5;Harmonic oscillator (not damped and damped cases)
+6;Momentum and angular momentum conservation principles for a material point
+7;Potentiality of central forces and finding potential of a gravity field
+8;Inertial forces and non-inertial reference frames
+9;Special relativity (Lorentz transformations derivation)
+10;Relativistic adding up of velocities
+11;Frequency shift of a photon in a gravitational field
+12;Thermodynamics principles and state functions
