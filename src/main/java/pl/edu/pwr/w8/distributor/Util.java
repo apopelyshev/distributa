@@ -28,11 +28,7 @@ public class Util {
   public static void handleTrackCode(HttpServletRequest req, String arg, Person[] searchArr) {
     for (Person smb : searchArr) {
       String temp = smb.getName().toUpperCase()+"_TRACK";
-      System.out.println("{"+System.getenv(temp).trim()+"} and {"+arg.trim()+"}");
-      System.out.println("Lengths: "+System.getenv(temp).trim().length()+" and "+arg.trim().length());
-      System.out.println("Check: "+(System.getenv(temp).trim()==arg.trim()));
-      if (System.getenv(temp).trim()==arg.trim()) {
-        System.out.println("GOT A MATCH. RETRIEVED IP: "+getIP(req));
+      if (System.getenv(temp).equals(arg)) {
         System.setProperty(temp, getMAC(getIP(req)));
         break;
       }
@@ -40,7 +36,7 @@ public class Util {
   }
 
   public static String getIP(HttpServletRequest req) {
-    return (req.getHeader("x-forwarded-for") == null) ? req.getRemoteAddr() : req.getHeader("x-forwarded-for");
+    return (req.getHeader("x-forwarded-for") == null) ? req.getRemoteAddr()+" (NOT REAL)" : req.getHeader("x-forwarded-for");
   }
 
   public static String getMAC(String ip) {
