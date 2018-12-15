@@ -9,7 +9,7 @@ public class TopicList {
   private final String pathToFile = Util.getProps().getProperty("pathTo.dbTextFile");
   private final List<Topic> topics = new ArrayList<Topic>();
   
-  public TopicList() {    
+  public TopicList() {
     try {
       BufferedReader bfReader = new BufferedReader(Util.path2Stream(pathToFile));
       String line;
