@@ -107,7 +107,7 @@ public class CacheService {
       
       if (valFromCache.isPresent()) {
         if (printNeeded)
-          sb.append(generatedKey+": "+valFromCache+"\n");
+          sb.append(generatedKey+": "+valFromCache.orElse("xxx")+"\n");
         else
           setOrDelCached(generatedKey);
       }
