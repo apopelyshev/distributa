@@ -91,7 +91,7 @@ public class CacheService {
       String generatedKey = generateTrackKey(smb);
       Optional<String> valFromCache = Optional.ofNullable(getCached(generatedKey));
       
-      if (valFromCache.isPresent() && valFromCache.orElse("").indexOf(Util.getMAC(req)) >= 0)
+      if (valFromCache.isPresent() && valFromCache.orElse("").toString().indexOf(Util.getMAC(req)) >= 0)
         return smb;
     }
     return null;
@@ -107,7 +107,7 @@ public class CacheService {
       
       if (valFromCache.isPresent()) {
         if (printNeeded)
-          sb.append(generatedKey+": "+valFromCache.orElse("xxx")+"\n");
+          sb.append(generatedKey+": "+valFromCache.orElse("xxx").toString()+"\n");
         else
           setOrDelCached(generatedKey);
       }
