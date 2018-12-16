@@ -14,36 +14,33 @@ import net.rubyeye.xmemcached.MemcachedClient;
 
 public class MainServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
-  private MemcachedClient cacheInstance;
+  private MemcachedClient memcachedInstance;
   private AppService appService = new AppService();
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    Person member;
     String code = req.getParameter("c");
-    Person[] result = appService.getPeople();
-    if (code != null) {
-      if (cacheInstance==null) {
-        try { cacheInstance = Util.buildCacheClient(); }
-        catch (IOException ioe) { ioe.printStackTrace(); }
-      }
-      for (Person smb : result) {
-        String temp = smb.getName().toUpperCase() + "_TRACK";
-        boolean check = Util.getCached(temp, cacheInstance)==null
-                     || Util.getCached(temp, cacheInstance).isEmpty();
-        if (System.getenv(temp).equals(code) && check) {
-          Util.setCached(temp, Util.getIP(req), cacheInstance);
-          break;
-        }
-      }
+    PersonArr allMembers = appService.getPeople();
+    
+    try {
+      if (memcachedInstance==null)
+        memcachedInstance = Util.buildCacheClient();
+      
+      if (code != null)
+        member = Util.getMemberByCode(req, memcachedInstance, code, allMembers);
+      member = Util.getMemberByMAC(req, memcachedInstance, allMembers);
+      if (member!=null) Util.recordMemberStatus(member, allMembers);
     }
-    forwardContent(req, resp, result);
+    catch (IOException ioe) { ioe.printStackTrace(); }
+    
+    forwardContent(req, resp, allMembers.getArr());
   }
 
-  private void forwardContent(HttpServletRequest req, HttpServletResponse resp, Person[] peopleArr)
-      throws ServletException, IOException {
+  private void forwardContent(HttpServletRequest req, HttpServletResponse resp, Person[] members2jsp) throws ServletException, IOException {
     String nextJSP = Util.getProps().getProperty("pathTo.pages") + "main.jsp";
     RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-    req.setAttribute("peopleArr", peopleArr);
+    req.setAttribute("members", members2jsp);
     dispatcher.forward(req, resp);
   }
 }

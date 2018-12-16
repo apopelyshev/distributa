@@ -6,11 +6,11 @@
 </head>
 <body>
 	<c:choose>
-		<c:when test="${not empty peopleArr}">
-			<c:forEach var="person" items="${peopleArr}">
+		<c:when test="${not empty members}">
+			<c:forEach var="member" items="${members.getArr()}">
 				<div>
-					<img src="${person.getImagePath()}" />
-					<p>${person.getName()}</p>
+					<img src="${member.getImagePath()}" />
+					<p>${member.getName()}, Active: ${member.checkActive()}</p>
 				</div>
 			</c:forEach>
 		</c:when>

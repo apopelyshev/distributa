@@ -10,10 +10,10 @@ import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeoutException;
+import javax.servlet.http.HttpServletRequest;
 
 import net.rubyeye.xmemcached.auth.AuthInfo;
 import net.rubyeye.xmemcached.command.BinaryCommandFactory;
@@ -38,9 +38,46 @@ public class Util {
     InputStream temp = new Util().getClass().getResourceAsStream(arg);
     return new InputStreamReader(temp, "UTF-8");
   }
+  
+  public static void recordMemberStatus(Person memberFromServlet, PersonArr arrOfAllMembers) {
+    int searchInd = arrOfAllMembers.getIndAtMatch(memberFromServlet);
+    if (searchInd>=0) arrOfAllMembers.getArr()[searchInd].setActive(true);
+  }
+  
+  // Get client by the known hex code
+  public static Person getMemberByCode(HttpServletRequest req, MemcachedClient cacheClientFromServlet,
+      String codeFromServlet, PersonArr arrOfAllMembers) {
+    for (Person smb : arrOfAllMembers.getArr()) {
+      String generatedKey = smb.getName().toUpperCase() + "_TRACK";
+      String valFromCache = getCached(generatedKey, cacheClientFromServlet);
+      boolean codeMatchesToEnvCode = System.getenv(generatedKey).equals(codeFromServlet);
+      boolean isNotInCache = valFromCache==null || valFromCache.isEmpty();
+      
+      if (codeMatchesToEnvCode && isNotInCache) {
+        setCached(generatedKey, getMAC(req), cacheClientFromServlet);
+        return smb;
+      } else if (codeMatchesToEnvCode)
+        return smb;
+    }
+    return null;
+  }
+  
+  // Get client if his/her MAC exists in cache
+  public static Person getMemberByMAC(HttpServletRequest req, MemcachedClient cacheClientFromServlet, 
+      PersonArr arrOfAllMembers) {
+    for (Person smb : arrOfAllMembers.getArr()) {
+      String generatedKey = smb.getName().toUpperCase() + "_TRACK";
+      String valFromCache = getCached(generatedKey, cacheClientFromServlet);
+      boolean isInCache = valFromCache!=null && !valFromCache.isEmpty();
+      if (isInCache && valFromCache.indexOf(getMAC(req))>=0)
+        return smb;
+    }
+    return null;
+  }
 
   public static MemcachedClient buildCacheClient() throws IOException {
-    List<InetSocketAddress> servers = AddrUtil.getAddresses(System.getenv("MEMCACHIER_SERVERS").replace(",", " "));
+    String valueFromEnv = System.getenv("MEMCACHIER_SERVERS").replace(",", " ");
+    List<InetSocketAddress> servers = AddrUtil.getAddresses(valueFromEnv);
     AuthInfo authInfo = AuthInfo.plain(
         System.getenv("MEMCACHIER_USERNAME"),
         System.getenv("MEMCACHIER_PASSWORD")
@@ -57,9 +94,9 @@ public class Util {
     return builder.build();
   }
   
-  public static boolean setCached(String key, String value, MemcachedClient mc) {
+  public static boolean setCached(String key, String value, MemcachedClient cache) {
     try {
-      mc.set(key, 0, value);
+      cache.set(key, 0, value);
       return true;
     } catch (TimeoutException | InterruptedException | MemcachedException e) {
       e.printStackTrace();
@@ -67,24 +104,26 @@ public class Util {
     return false;
   }
   
-  public static String getCached(String key, MemcachedClient mc) {
+  public static String getCached(String key, MemcachedClient cache) {
     String value = "";
     try {
-      value = mc.get(key);
+      value = cache.get(key);
     } catch (TimeoutException | InterruptedException | MemcachedException e) {
       e.printStackTrace();
     }
-    System.out.println("VALUE? - "+value);
     return value;
   }
 
   public static String getIP(HttpServletRequest req) {
     return (req.getHeader("x-forwarded-for") == null)
-        ? req.getRemoteAddr() + " (NOT REAL)"
+        ? req.getRemoteAddr() + "NR"
         : req.getHeader("x-forwarded-for");
   }
 
-  public static String getMAC(String ip) {
+  public static String getMAC(HttpServletRequest req) {
+    String ip = getIP(req);
+    if (ip.endsWith("NR"))
+      return ip;
     StringBuilder sb = new StringBuilder();
     try {
       InetAddress address = InetAddress.getByName(ip);

@@ -8,6 +8,7 @@ public class Person {
   private String name;
   private String gender;
   private List<Integer> hasTopics;
+  private boolean isViewing = false;
   
   public Person(String name, String gender) {
     this.name = name;
@@ -23,7 +24,7 @@ public class Person {
   }
   private List<Integer> getIndList(String arg) {
     List<Integer> res = new ArrayList<Integer>();
-    if (arg!="") {
+    if (!arg.isEmpty()) {
       String[] temp = arg.split(";");
       for (String el : temp)
         res.add(Integer.valueOf(el));
@@ -31,10 +32,13 @@ public class Person {
     return res;
   }
   
+  public boolean checkActive() { return isViewing; }
+  public boolean equals(Person personToMatch) { return name==personToMatch.name; }
   public List<Integer> getOwnTopics() { return hasTopics; }
   public String getName() { return name; }
   public String getGender() { return gender; }
   public String getImagePath() { return Util.getProps().getProperty("pathTo.images")+name+".png"; }
+  public void setActive(boolean arg) { isViewing = arg; }
   public String toString() {
     return "Person{"+"name="+name+", gender="+gender+", topics="+hasTopics.toString()+"}";
   }
