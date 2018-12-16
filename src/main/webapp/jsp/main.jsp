@@ -7,7 +7,7 @@
 <body>
 	<c:choose>
 		<c:when test="${not empty members}">
-			<c:forEach var="member" items="${members.getArr()}">
+			<c:forEach var="member" items="${members}">
 				<div>
 					<img src="${member.getImagePath()}" />
 					<p>${member.getName()}, Active: ${member.checkActive()}</p>
