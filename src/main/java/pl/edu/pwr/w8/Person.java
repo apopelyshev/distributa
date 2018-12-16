@@ -1,4 +1,4 @@
-package pl.edu.pwr.w8.distributor;
+package pl.edu.pwr.w8;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +16,10 @@ public class Person {
     this.hasTopics = getIndList(getCheckVariable().orElse(""));
   }
   
-  public boolean checkReceived() {
+  protected boolean checkReceived() {
     return getCheckVariable().isPresent();
   }
-  public Optional<String> getCheckVariable() {
+  protected Optional<String> getCheckVariable() {
     return Optional.ofNullable(System.getenv(name.toUpperCase()+"_HAS_TOPICS"));
   }
   private List<Integer> getIndList(String arg) {
@@ -32,13 +32,13 @@ public class Person {
     return res;
   }
   
-  public boolean checkActive() { return isViewing; }
-  public boolean equals(Person personToMatch) { return name==personToMatch.name; }
-  public List<Integer> getOwnTopics() { return hasTopics; }
-  public String getName() { return name; }
-  public String getGender() { return gender; }
-  public String getImagePath() { return Util.getProps().getProperty("pathTo.images")+name+".png"; }
-  public void setActive(boolean arg) { isViewing = arg; }
+  protected boolean checkActive() { return isViewing; }
+  protected boolean equals(Person personToMatch) { return name==personToMatch.name; }
+  protected List<Integer> getOwnTopics() { return hasTopics; }
+  protected String getName() { return name; }
+  protected String getGender() { return gender; }
+  protected String getImagePath() { return Util.getProps().getProperty("pathTo.images")+name+".png"; }
+  protected void setActive(boolean arg) { isViewing = arg; }
   public String toString() {
     return "Person{"+"name="+name+", gender="+gender+", topics="+hasTopics.toString()+"}";
   }

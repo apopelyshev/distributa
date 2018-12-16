@@ -1,4 +1,4 @@
-package pl.edu.pwr.w8.distributor;
+package pl.edu.pwr.w8;
 
 import java.util.List;
 
@@ -11,10 +11,10 @@ public class AppService {
       new Person("Artem", "male")
   );
   
-  public void updateOwners() {
+  protected void updateOwners() {
     for (Person smb : people.getArr())
       listInstance.assignToOwner(smb);
   }
-  public List<Topic> getList() { return listInstance.getTopics(); }
-  public PersonArr getPeople() { return people; }
+  protected List<Topic> getList() { return listInstance.getTopics(); }
+  protected PersonArr getPeople() { return people; }
 }

@@ -1,4 +1,4 @@
-package pl.edu.pwr.w8.distributor;
+package pl.edu.pwr.w8;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +21,7 @@ public class TopicList {
     }
   }
   
-  public boolean assignToOwner(Person smb) {
+  protected boolean assignToOwner(Person smb) {
     boolean res = false;
     for (Topic el : topics) {
       if (smb.getOwnTopics().contains(el.getInd())) {
@@ -31,5 +31,5 @@ public class TopicList {
     }
     return res;
   }
-  public List<Topic> getTopics() { return topics; }
+  protected List<Topic> getTopics() { return topics; }
 }

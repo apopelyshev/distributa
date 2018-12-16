@@ -1,11 +1,11 @@
-package pl.edu.pwr.w8.distributor;
+package pl.edu.pwr.w8;
 
 import java.util.Optional;
 
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 
-public class Main {
+public class Base {
   public static final Optional<String> PORT = Optional.ofNullable(System.getenv("PORT"));
 
   public static void main(String[] args) throws Exception {

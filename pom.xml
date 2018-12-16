@@ -113,7 +113,7 @@
 					<finalName>${global.name}</finalName>
 					<archive>
 						<manifest>
-							<mainClass>pl.edu.pwr.w8.distributor.Main</mainClass>
+							<mainClass>pl.edu.pwr.w8.Base</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

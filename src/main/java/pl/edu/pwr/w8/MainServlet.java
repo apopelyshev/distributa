@@ -1,39 +1,36 @@
-package pl.edu.pwr.w8.distributor;
+package pl.edu.pwr.w8;
 
 import java.io.IOException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-
-import net.rubyeye.xmemcached.MemcachedClient;
 
 @WebServlet(name = "MainServlet", urlPatterns = { "/main" })
 
 public class MainServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
-  private MemcachedClient memcachedInstance;
+  private CacheService cacheService = new CacheService();
   private AppService appService = new AppService();
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     Person member;
-    String code = req.getParameter("c");
     PersonArr allMembers = appService.getPeople();
+    String code = req.getParameter("c");
     
-    try {
-      if (memcachedInstance==null)
-        memcachedInstance = Util.buildCacheClient();
-      
-      if (code != null)
-        member = Util.getMemberByCode(req, memcachedInstance, code, allMembers);
-      member = Util.getMemberByMAC(req, memcachedInstance, allMembers);
-      if (member!=null) Util.recordMemberStatus(member, allMembers);
-    }
-    catch (IOException ioe) { ioe.printStackTrace(); }
+    if (code != null)
+      member = cacheService.getMemberByCode(req, code, allMembers);
+    member = cacheService.getMemberByMAC(req, allMembers);
+    if (member!=null) Util.recordMemberStatus(member, allMembers);
     
+    if (System.getenv("RESET")!=null)
+      cacheService.handleAllMemberTrackings(allMembers, "reset");
+    String debugStr = "print";
+    cacheService.handleAllMemberTrackings(allMembers, debugStr);
+    System.out.println(debugStr);
     forwardContent(req, resp, allMembers.getArr());
   }
 

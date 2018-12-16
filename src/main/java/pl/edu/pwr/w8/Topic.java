@@ -1,4 +1,4 @@
-package pl.edu.pwr.w8.distributor;
+package pl.edu.pwr.w8;
 
 public class Topic {
   private int ind;
@@ -19,13 +19,13 @@ public class Topic {
       belongsTo = owner;
   }
   
-  public boolean setOwner(Person arg) {
+  protected boolean setOwner(Person arg) {
     if (arg==null)
       return false;
     belongsTo = arg;
     return true;
   }
-  public Person getOwner() { return belongsTo; }
-  public String getContent() { return content; }
-  public int getInd() { return ind; }
+  protected Person getOwner() { return belongsTo; }
+  protected String getContent() { return content; }
+  protected int getInd() { return ind; }
 }
