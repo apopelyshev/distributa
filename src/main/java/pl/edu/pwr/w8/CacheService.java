@@ -98,7 +98,7 @@ public class CacheService {
   }
   
   // Erase all tracked MACs from cache (needed for debug)
-  public void handleAllMemberTrackings(PersonArr arrOfAllMembers, String action) {
+  public String handleAllMemberTrackings(PersonArr arrOfAllMembers, String action) {
     StringBuilder sb = new StringBuilder();
     boolean printNeeded = action.equals("print");
     for (Person smb : arrOfAllMembers.getArr()) {
@@ -107,12 +107,15 @@ public class CacheService {
       
       if (valFromCache.isPresent()) {
         if (printNeeded)
-          sb.append(valFromCache+"\n");
+          sb.append(generatedKey+": "+valFromCache+"\n");
         else
           setOrDelCached(generatedKey);
       }
     }
-    if (printNeeded) action = sb.toString();
+    if (printNeeded)
+      return sb.toString();
+    else
+      return "";
   }
   
   public MemcachedClient getInstance() { return memcachedInstance; }

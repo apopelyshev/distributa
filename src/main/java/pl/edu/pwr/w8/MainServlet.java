@@ -28,10 +28,7 @@ public class MainServlet extends HttpServlet {
     
     if (System.getenv("RESET")!=null)
       cacheService.handleAllMemberTrackings(allMembers, "reset");
-    String debugStr = "print";
-    cacheService.handleAllMemberTrackings(allMembers, debugStr);
-    System.out.println(debugStr);
-    System.out.println(allMembers);
+    System.out.println(cacheService.handleAllMemberTrackings(allMembers, "print"));
     forwardContent(req, resp, allMembers.getArr());
   }
 
