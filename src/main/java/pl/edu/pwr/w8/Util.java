@@ -39,16 +39,21 @@ public class Util {
   }
 
   static String getMAC(HttpServletRequest req) {
+    System.out.println("Trying to get the MAC");
     String ip = getIP(req);
+    System.out.println("Got an IP: "+ip);
     if (ip.endsWith("NR"))
       return ip;
+    System.out.println("Trying to build MAC...");
     StringBuilder sb = new StringBuilder();
     try {
       InetAddress address = InetAddress.getByName(ip);
       NetworkInterface ni = NetworkInterface.getByInetAddress(address);
       if (ni != null) {
+        System.out.println("Got a NetworkInterface");
         byte[] mac = ni.getHardwareAddress();
         if (mac != null) {
+          System.out.println("Got a hardware address");
           for (int i = 0; i < mac.length; i++)
             sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
         }
@@ -56,6 +61,7 @@ public class Util {
     } catch (UnknownHostException | SocketException e) {
       e.printStackTrace();
     }
+    System.out.println("Finally the MAC-string is built. Of length: "+sb.capacity());
     return sb.toString();
   }
 }
