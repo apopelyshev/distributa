@@ -18,4 +18,10 @@ public class PersonArr {
         .sum();
   }
   protected Person[] getArr() { return array; }
+  public String toString() {
+    String res = "";
+    for (Person el : array)
+      res+=el;
+    return res;
+  }
 }

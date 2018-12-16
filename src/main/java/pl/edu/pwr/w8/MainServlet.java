@@ -31,13 +31,13 @@ public class MainServlet extends HttpServlet {
     String debugStr = "print";
     cacheService.handleAllMemberTrackings(allMembers, debugStr);
     System.out.println(debugStr);
+    System.out.println(allMembers);
     forwardContent(req, resp, allMembers.getArr());
   }
 
   private void forwardContent(HttpServletRequest req, HttpServletResponse resp, Person[] members2jsp) throws ServletException, IOException {
     String nextJSP = Util.getProps().getProperty("pathTo.pages") + "main.jsp";
     RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-    System.out.println(members2jsp.toString());
     req.setAttribute("members", members2jsp);
     dispatcher.forward(req, resp);
   }
