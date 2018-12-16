@@ -24,7 +24,7 @@ public class CacheService {
     catch (IOException ioe) { ioe.printStackTrace(); }
   }
   
-  protected static MemcachedClient buildCacheClient() throws IOException {
+  public static MemcachedClient buildCacheClient() throws IOException {
     String valueFromEnv = System.getenv("MEMCACHIER_SERVERS").replace(",", " ");
     List<InetSocketAddress> servers = AddrUtil.getAddresses(valueFromEnv);
     AuthInfo authInfo = AuthInfo.plain(
@@ -43,7 +43,7 @@ public class CacheService {
     return builder.build();
   }
   
-  protected boolean setOrDelCached(String... args) {
+  public boolean setOrDelCached(String... args) {
     try {
       if (args.length>1) memcachedInstance.set(args[0], 0, args[1]);
       else memcachedInstance.delete(args[0]);
@@ -55,7 +55,7 @@ public class CacheService {
     return false;
   }
   
-  protected String getCached(String key) {
+  public String getCached(String key) {
     String value = "";
     try {
       value = memcachedInstance.get(key);
@@ -65,12 +65,12 @@ public class CacheService {
     return value;
   }
   
-  protected String generateTrackKey(Person p) {
+  private String generateTrackKey(Person p) {
     return p.getName().toUpperCase()+"_TRACK";
   }
   
   //Get client by the known hex code
-  protected Person getMemberByCode(HttpServletRequest req, String codeFromServlet, PersonArr arrOfAllMembers) {
+  public Person getMemberByCode(HttpServletRequest req, String codeFromServlet, PersonArr arrOfAllMembers) {
     for (Person smb : arrOfAllMembers.getArr()) {
       String generatedKey = generateTrackKey(smb);
       Optional<String> valFromCache = Optional.ofNullable(getCached(generatedKey));
@@ -86,7 +86,7 @@ public class CacheService {
   }
   
   // Get client if his/her MAC exists in cache
-  protected Person getMemberByMAC(HttpServletRequest req, PersonArr arrOfAllMembers) {
+  public Person getMemberByMAC(HttpServletRequest req, PersonArr arrOfAllMembers) {
     for (Person smb : arrOfAllMembers.getArr()) {
       String generatedKey = generateTrackKey(smb);
       Optional<String> valFromCache = Optional.ofNullable(getCached(generatedKey));
@@ -98,7 +98,7 @@ public class CacheService {
   }
   
   // Erase all tracked MACs from cache (needed for debug)
-  protected void handleAllMemberTrackings(PersonArr arrOfAllMembers, String action) {
+  public void handleAllMemberTrackings(PersonArr arrOfAllMembers, String action) {
     StringBuilder sb = new StringBuilder();
     boolean printNeeded = action.equals("print");
     for (Person smb : arrOfAllMembers.getArr()) {
@@ -115,5 +115,5 @@ public class CacheService {
     if (printNeeded) action = sb.toString();
   }
   
-  protected MemcachedClient getInstance() { return memcachedInstance; }
+  public MemcachedClient getInstance() { return memcachedInstance; }
 }

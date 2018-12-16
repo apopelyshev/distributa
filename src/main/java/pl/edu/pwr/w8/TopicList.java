@@ -21,7 +21,7 @@ public class TopicList {
     }
   }
   
-  protected boolean assignToOwner(Person smb) {
+  public boolean assignToOwner(Person smb) {
     boolean res = false;
     for (Topic el : topics) {
       if (smb.getOwnTopics().contains(el.getInd())) {
@@ -31,5 +31,5 @@ public class TopicList {
     }
     return res;
   }
-  protected List<Topic> getTopics() { return topics; }
+  public List<Topic> getTopics() { return topics; }
 }

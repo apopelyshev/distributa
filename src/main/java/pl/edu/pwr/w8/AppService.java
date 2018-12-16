@@ -11,10 +11,10 @@ public class AppService {
       new Person("Artem", "male")
   );
   
-  protected void updateOwners() {
+  public void updateOwners() {
     for (Person smb : people.getArr())
       listInstance.assignToOwner(smb);
   }
-  protected List<Topic> getList() { return listInstance.getTopics(); }
-  protected PersonArr getPeople() { return people; }
+  public List<Topic> getList() { return listInstance.getTopics(); }
+  public PersonArr getPeople() { return people; }
 }

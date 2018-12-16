@@ -19,13 +19,13 @@ public class Topic {
       belongsTo = owner;
   }
   
-  protected boolean setOwner(Person arg) {
+  public boolean setOwner(Person arg) {
     if (arg==null)
       return false;
     belongsTo = arg;
     return true;
   }
-  protected Person getOwner() { return belongsTo; }
-  protected String getContent() { return content; }
-  protected int getInd() { return ind; }
+  public Person getOwner() { return belongsTo; }
+  public String getContent() { return content; }
+  public int getInd() { return ind; }
 }

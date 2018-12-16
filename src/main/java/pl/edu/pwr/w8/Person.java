@@ -16,10 +16,10 @@ public class Person {
     this.hasTopics = getIndList(getCheckVariable().orElse(""));
   }
   
-  protected boolean checkReceived() {
+  public boolean checkReceived() {
     return getCheckVariable().isPresent();
   }
-  protected Optional<String> getCheckVariable() {
+  public Optional<String> getCheckVariable() {
     return Optional.ofNullable(System.getenv(name.toUpperCase()+"_HAS_TOPICS"));
   }
   private List<Integer> getIndList(String arg) {
@@ -32,13 +32,13 @@ public class Person {
     return res;
   }
   
-  protected boolean checkActive() { return isViewing; }
-  protected boolean equals(Person personToMatch) { return name==personToMatch.name; }
-  protected List<Integer> getOwnTopics() { return hasTopics; }
-  protected String getName() { return name; }
-  protected String getGender() { return gender; }
-  protected String getImagePath() { return Util.getProps().getProperty("pathTo.images")+name+".png"; }
-  protected void setActive(boolean arg) { isViewing = arg; }
+  public boolean checkActive() { return isViewing; }
+  public boolean equals(Person personToMatch) { return name==personToMatch.name; }
+  public List<Integer> getOwnTopics() { return hasTopics; }
+  public String getName() { return name; }
+  public String getGender() { return gender; }
+  public String getImagePath() { return Util.getProps().getProperty("pathTo.images")+name+".png"; }
+  public void setActive(boolean arg) { isViewing = arg; }
   public String toString() {
     return "Person{"+"name="+name+", gender="+gender+", topics="+hasTopics.toString()+"}";
   }
