@@ -1,1 +1,1 @@
-# Distributa - social media giveaway tool
+# Distributa - social media contest tool
