@@ -1,1 +1,1 @@
-"# w8-physics-distributor" 
+# Distributa - social media giveaway tool
