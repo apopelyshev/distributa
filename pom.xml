@@ -16,7 +16,7 @@
 		<pathTo.pages>/jsp/</pathTo.pages>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
-		<tomcat.version>7.0.92</tomcat.version>
+		<tomcat.version>7.0.107</tomcat.version>
 	</properties>
 	
 	<dependencies>
